@@ -25,7 +25,7 @@ const Login = () => {
       };
 
       const response = await fetch(
-        `http://localhost:4000/api/v1/auth/twitter`,
+        `${import.meta.env.VITE_SERVER}/api/v1/auth/twitter`,
         {
           method: "POST",
           headers: {
@@ -44,7 +44,7 @@ const Login = () => {
 
       const data = await response.json();
       localStorage.setItem("token", data.token);
-      dispatch(login({ user: data.user, accessToken: data.accessToken }));
+      dispatch(login({ user: data.user}));
       toast.success("Login successful!");
       navigate("/");
     } catch (error) {
@@ -64,7 +64,7 @@ const Login = () => {
         setWallet(userAddress);
 
         const nonceResponse = await fetch(
-          `http://localhost:4000/api/v1/auth/metamask/nonce?userAddress=${userAddress}`
+          `${import.meta.env.VITE_SERVER}/api/v1/auth/metamask/nonce?userAddress=${userAddress}`
         );
         const { nonce } = await nonceResponse.json();
         const message = `Sign this message to authenticate: ${nonce}`;
@@ -79,7 +79,7 @@ const Login = () => {
           referralCode:referral
         }
         const verifyResponse = await fetch(
-          "http://localhost:4000/api/v1/auth/metamask",
+          `${import.meta.env.VITE_SERVER}/api/v1/auth/metamask`,
           {
             method: "POST",
             headers: {
@@ -91,6 +91,8 @@ const Login = () => {
         );
 
         const verifyData = await verifyResponse.json();
+      dispatch(login({ user: verifyData.user}));
+
         if (verifyData) {
           console.log("Authenticated with MetaMask:", userAddress);
 

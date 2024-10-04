@@ -10,12 +10,12 @@ const Home = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const refreshToken = Cookies.get("refreshToken");
-
+  
   useEffect(() => {
     const fetchNewTokens = async () => {
       try {
         const response = await fetch(
-          "http://localhost:4000/api/v1/refresh-token",
+         `${import.meta.env.VITE_SERVER}/api/v1/refresh-token`,
           {
             method: "POST",
             credentials: "include",
@@ -42,7 +42,7 @@ const Home = () => {
     } else if (token) {
       const fetchUserData = async () => {
         try {
-          const response = await fetch("http://localhost:4000/api/v1/home", {
+          const response = await fetch(`${import.meta.env.VITE_SERVER}/api/v1/home`, {
             method: "GET",
             headers: {
               Authorization: `${token}`,
@@ -94,6 +94,9 @@ const Home = () => {
     <div>
       Home
       <h2>Welcome</h2>
+      <h2>Referral Code: {user?.referralCode || 'N/A'}</h2>
+      <h2>Points: {user?.points || 0}</h2>
+
       <button onClick={submitHandler}>Dashboard</button>
       <button onClick={logoutHandler}>Logout</button>
     </div>
